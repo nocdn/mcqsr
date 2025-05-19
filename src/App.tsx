@@ -1,13 +1,14 @@
 import Navbar from "./Navbar";
 import Question from "./Question";
-import { useState } from "react";
+import Sets from "./Sets";
+import { useEffect, useState } from "react";
 
 export default function App() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isEntering, setIsEntering] = useState(true);
-
-  // Sample questions array - in a real app this would come from your data source
+  const [answeredQuestions, setAnsweredQuestions] = useState<string[]>([]);
+  const [selectedSet, setSelectedSet] = useState<string>("Set 1");
   const questions = [
     {
       question:
@@ -29,8 +30,22 @@ export default function App() {
         "Humanistic perspective",
       ],
     },
-    // Add more questions as needed
   ];
+
+  useEffect(() => {
+    const answeredQuestions = localStorage.getItem("answeredQuestions");
+    if (answeredQuestions) {
+      setAnsweredQuestions(JSON.parse(answeredQuestions));
+    }
+  }, []);
+
+  function addAnsweredQuestion(question: string) {
+    setAnsweredQuestions([...answeredQuestions, question]);
+    localStorage.setItem(
+      "answeredQuestions",
+      JSON.stringify(answeredQuestions)
+    );
+  }
 
   function handleBack() {
     if (currentQuestionIndex > 0 && !isAnimating) {
@@ -43,22 +58,20 @@ export default function App() {
         setCurrentQuestionIndex(currentQuestionIndex - 1);
         setIsAnimating(false);
         setIsEntering(true);
-      }, 300); // Match this to your animation duration
+      }, 100);
     }
   }
 
   function handleNext() {
     if (currentQuestionIndex < questions.length - 1 && !isAnimating) {
-      // Start exit animation
       setIsAnimating(true);
       setIsEntering(false);
 
-      // After animation completes, change the question and start entrance animation
       setTimeout(() => {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
         setIsAnimating(false);
         setIsEntering(true);
-      }, 300); // Match this to your animation duration
+      }, 100);
     }
   }
 
@@ -66,19 +79,29 @@ export default function App() {
 
   return (
     <main className="w-full h-dvh flex flex-col items-center justify-center">
+      <Sets
+        sets={["Set 1", "Set 2", "Occupational, Clinical and Educational"]}
+        className="mt-16"
+        selectedSet={selectedSet}
+        setSelectedSet={setSelectedSet}
+      />
       <Question
         question={currentQuestion.question}
         options={currentQuestion.options}
-        className="mt-24"
+        className="mt-12"
         isAnimating={isAnimating}
         isEntering={isEntering}
+        hasAnswered={answeredQuestions.includes(currentQuestion.question)}
+        onExplain={() => {
+          console.log("explain");
+        }}
       />
       <Navbar
         onBack={handleBack}
         onNext={handleNext}
         questionNumber={currentQuestionIndex + 1}
         totalQuestions={questions.length}
-        className="mt-auto mb-16"
+        className="mt-auto mb-16 opacity-20 hover:opacity-100 transition-opacity duration-200"
       />
     </main>
   );
