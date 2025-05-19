@@ -17,5 +17,57 @@
   --font-jetbrains-mono: "JetBrains Mono", monospace;
   --font-geist-mono: "Geist Mono", monospace;
   --font-geist: "Geist", sans-serif;
-  --font-ibm-plex-mono: "IBM Plex Mono", monospace;
+  --font-plex-mono: "IBM Plex Mono", monospace;
+
+  --animate-settings-modal-up: settings-modal-up 0.5s
+    cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  --animate-settings-modal-down: settings-modal-down 0.3s
+    cubic-bezier(0.215, 0.61, 0.355, 1);
+
+  @keyframes settings-modal-up {
+    0% {
+      opacity: 0;
+      filter: blur(6px);
+      transform: translateY(30px) scale(1.1);
+    }
+    100% {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  @keyframes settings-modal-down {
+    0% {
+      opacity: 1;
+      filter: blur(0);
+      transform: translateY(0) scale(1);
+    }
+    100% {
+      opacity: 0;
+      filter: blur(4px);
+      transform: translateY(15px) scale(1.05);
+    }
+  }
+
+  --animate-bg-fade-in: bg-fade-in 0.3s ease forwards;
+  --animate-bg-fade-out: bg-fade-out 0.3s ease forwards;
+
+  @keyframes bg-fade-in {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  @keyframes bg-fade-out {
+    0% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 }
