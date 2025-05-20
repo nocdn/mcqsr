@@ -1,12 +1,10 @@
-import { useEffect, useState } from "react";
-
 export default function Sets({
   sets,
   className,
   selectedSet,
   setSelectedSet,
 }: {
-  sets: string[];
+  sets: { name: string }[];
   className?: string;
   selectedSet?: string;
   setSelectedSet?: (set: string) => void;
@@ -15,17 +13,17 @@ export default function Sets({
     <div
       className={`flex gap-2 opacity-20 hover:opacity-100 transition-opacity duration-200 ${className} w-5xl`}
     >
-      {sets.map((set) => (
+      {sets.map((set, index) => (
         <div
           className={`px-4 py-2 rounded-lg border-gray-200 hover:border-gray-400 border-[1.5px] hover:bg-gray-50 cursor-pointer ${
-            selectedSet === set ? "border-gray-400" : "border-gray-200"
+            selectedSet === set.name ? "border-gray-400" : "border-gray-200"
           }`}
-          key={set}
+          key={index}
           onClick={() => {
-            setSelectedSet?.(set);
+            setSelectedSet?.(set.name);
           }}
         >
-          {set}
+          {set.name || `Set ${index + 1}`}
         </div>
       ))}
     </div>

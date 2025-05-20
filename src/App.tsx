@@ -14,31 +14,8 @@ export default function App() {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [citations, setCitations] = useState<string[]>([]);
   const [sets, setSets] = useState<string[]>([]);
+  const [questions, setQuestions] = useState<string[]>([]);
 
-  const questions = [
-    {
-      question:
-        "In a famous experiment, Ivan Pavlov trained dogs to salivate at the sound of a bell by repeatedly pairing the bell with food. What is the bell considered in the context of classical conditioning after the dogs have learned to associate it with food?",
-      options: [
-        "Unconditioned stimulus",
-        "Unconditioned response",
-        "Conditioned stimulus",
-        "Conditioned response",
-      ],
-      answer: "Conditioned stimulus",
-    },
-    {
-      question:
-        "Which psychological perspective emphasizes the role of unconscious processes in shaping behavior?",
-      options: [
-        "Cognitive perspective",
-        "Behavioral perspective",
-        "Psychodynamic perspective",
-        "Humanistic perspective",
-      ],
-      answer: "Psychodynamic perspective",
-    },
-  ];
   const currentQuestion = questions[currentQuestionIndex];
 
   async function fetchSets() {
@@ -47,23 +24,11 @@ export default function App() {
         "https://4mu4p3ymqfloak377n6whzywpy0jcfki.lambda-url.eu-west-2.on.aws/namedsets"
       );
       const data = await response.json();
-      // ensure we have a string array
-      const setNames = Array.isArray(data)
-        ? data.map((set) =>
-            typeof set === "string"
-              ? set
-              : set && typeof set.name === "string"
-              ? set.name
-              : `Set ${data.indexOf(set) + 1}`
-          )
-        : [];
-
-      // ensure uniqueness
-      const uniqueSets = [...new Set(setNames)];
-      setSets(uniqueSets);
+      setSets(data);
+      console.log(data);
+      console.log(data[0]);
     } catch (error) {
       console.error("Failed to fetch sets:", error);
-      setSets(["General"]);
     }
   }
 
@@ -149,7 +114,7 @@ export default function App() {
           selectedSet={selectedSet}
           setSelectedSet={setSelectedSet}
         />
-        <Question
+        {/* <Question
           question={currentQuestion.question}
           options={currentQuestion.options}
           className="mt-12"
@@ -157,7 +122,7 @@ export default function App() {
           isEntering={isEntering}
           hasAnswered={answeredQuestions.includes(currentQuestion.question)}
           onExplain={handleExplain}
-        />
+        /> */}
         <Navbar
           onBack={handleBack}
           onNext={handleNext}
