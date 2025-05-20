@@ -13,6 +13,7 @@ export default function App() {
   const [explanation, setExplanation] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [citations, setCitations] = useState<string[]>([]);
+  const [sets, setSets] = useState<string[]>([]);
 
   const questions = [
     {
@@ -41,11 +42,29 @@ export default function App() {
   const currentQuestion = questions[currentQuestionIndex];
 
   async function fetchSets() {
-    const response = await fetch(
-      "https://4mu4p3ymqfloak377n6whzywpy0jcfki.lambda-url.eu-west-2.on.aws/sets"
-    );
-    const data = await response.json();
-    console.log(data);
+    try {
+      const response = await fetch(
+        "https://4mu4p3ymqfloak377n6whzywpy0jcfki.lambda-url.eu-west-2.on.aws/namedsets"
+      );
+      const data = await response.json();
+      // ensure we have a string array
+      const setNames = Array.isArray(data)
+        ? data.map((set) =>
+            typeof set === "string"
+              ? set
+              : set && typeof set.name === "string"
+              ? set.name
+              : `Set ${data.indexOf(set) + 1}`
+          )
+        : [];
+
+      // ensure uniqueness
+      const uniqueSets = [...new Set(setNames)];
+      setSets(uniqueSets);
+    } catch (error) {
+      console.error("Failed to fetch sets:", error);
+      setSets(["General"]);
+    }
   }
 
   useEffect(() => {
@@ -125,7 +144,7 @@ export default function App() {
     <>
       <main className="w-full h-dvh flex flex-col items-center justify-center">
         <Sets
-          sets={["Set 1", "Set 2", "Occupational, Clinical and Educational"]}
+          sets={sets}
           className="mt-16"
           selectedSet={selectedSet}
           setSelectedSet={setSelectedSet}
