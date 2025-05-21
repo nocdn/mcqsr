@@ -20,15 +20,19 @@ export default function Option({
   disabled = false,
 }: OptionProps) {
   let finalBackgroundColor: string;
+  let finalBorderColor: string;
   switch (status) {
     case "correct":
-      finalBackgroundColor = "#D1FFD1"; // light green
+      finalBackgroundColor = "#DCFCE7"; // light green
+      finalBorderColor = "#16A34A";
       break;
     case "incorrect":
-      finalBackgroundColor = "#FFD1D1"; // light coral
+      finalBackgroundColor = "#FFE2E1"; // light coral
+      finalBorderColor = "#DC2626";
       break;
     default:
       finalBackgroundColor = "white";
+      finalBorderColor = "#D1D5DB";
   }
 
   let buttonContent = (
@@ -47,20 +51,20 @@ export default function Option({
   }
   return (
     <motion.button
-      className={`font-jetbrains-mono border border-gray-200 w-fit px-5.5 py-2.5 rounded-md flex items-center gap-2 ${className} ${
+      className={`font-jetbrains-mono border text-left border-gray-200 w-fit px-5.5 py-2.5 rounded-md flex items-center gap-2 ${className} ${
         disabled ? "cursor-not-allowed opacity-70" : "cursor-pointer"
       }`}
       whileHover={
         !disabled
           ? {
               boxShadow: "0px 0px 0px 1px rgba(0, 0, 0, 0.3)",
-              scale: 1.005,
             }
           : {}
       }
       onHoverStart={() => {}}
       style={{
         backgroundColor: finalBackgroundColor,
+        borderColor: finalBorderColor,
       }}
       onClick={!disabled ? onClick : undefined}
       disabled={disabled}

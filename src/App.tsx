@@ -1,5 +1,5 @@
 import Navbar from "./Navbar";
-// import Question from "./Question"; // Commented out as per existing code
+import Question from "./Question"; // Commented out as per existing code
 import Sets from "./Sets";
 import ExplainModal from "./ExplainModal";
 import { useEffect, useState } from "react";
@@ -26,7 +26,9 @@ export default function App() {
   const [citations, setCitations] = useState<string[]>([]);
   const [sets, setSets] = useState<Set[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [selectedAnswers, setSelectedAnswers] = useState<{ [key: string]: string }>({});
+  const [selectedAnswers, setSelectedAnswers] = useState<{
+    [key: string]: string;
+  }>({});
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -92,7 +94,7 @@ export default function App() {
   }
 
   function handleOptionClick(questionText: string, selectedOption: string) {
-    setSelectedAnswers(prev => ({ ...prev, [questionText]: selectedOption }));
+    setSelectedAnswers((prev) => ({ ...prev, [questionText]: selectedOption }));
     addAnsweredQuestion(questionText);
   }
 
@@ -154,7 +156,9 @@ export default function App() {
     <>
       <main className="w-full h-dvh flex flex-col items-center justify-center">
         <Sets
-          sets={sets.map((set, index) => ({ name: set.name || `Set ${index + 1}` }))} // Pass names to Sets component
+          sets={sets.map((set, index) => ({
+            name: set.name || `Set ${index + 1}`,
+          }))} // Pass names to Sets component
           className="mt-16"
           selectedSet={selectedSet}
           setSelectedSet={setSelectedSet}

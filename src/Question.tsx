@@ -41,14 +41,7 @@ export default function Question({
     <div
       className={`max-w-5xl min-w-5xl flex flex-col gap-2 ${className} ${animationClasses}`}
     >
-      <div className="text-xl font-medium mb-8">
-        {question}
-        {hasAnswered ? ( // This hasAnswered prop might be redundant now given selectedAnswers
-          <p className="text-sm font-medium text-gray-500 mt-2 font-jetbrains-mono">
-            QUESTION ALREADY ANSWERED
-          </p>
-        ) : null}
-      </div>
+      <div className="text-xl font-medium mb-8">{question}</div>
       <div className="flex flex-col gap-2 w-full">
         {options.map((optionLabel) => {
           let status: "correct" | "incorrect" | "default" = "default";
