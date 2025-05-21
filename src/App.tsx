@@ -20,7 +20,7 @@ export default function App() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isEntering, setIsEntering] = useState(true);
   const [answeredQuestions, setAnsweredQuestions] = useState<string[]>([]);
-  const [selectedSet, setSelectedSet] = useState<string>(""); // Initialize as empty, will be set in useEffect
+  const [selectedSet, setSelectedSet] = useState<string>("");
   const [explanation, setExplanation] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [citations, setCitations] = useState<string[]>([]);
@@ -158,7 +158,7 @@ export default function App() {
       <main className="w-full h-dvh flex flex-col items-center justify-center">
         <Sets
           sets={sets.map((set, index) => ({
-            name: set.name || `Set ${index + 1}`,
+            name: set.name || `General ${index + 1}`,
           }))}
           className="mt-16"
           selectedSet={selectedSet}
