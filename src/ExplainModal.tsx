@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import NumberFlow from "@number-flow/react";
 import Spinner from "./Spinner";
-
+import { motion } from "motion/react";
 interface ExplainModalProps {
   explanation: string;
   citations: string[];
@@ -46,11 +46,14 @@ const ExplainModal: React.FC<ExplainModalProps> = ({
         role="dialog"
         tabIndex={0}
       >
-        <div
+        <motion.div
+          layout
           role="button"
           tabIndex={0}
           onMouseDown={(e) => e.stopPropagation()}
-          className={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-1/2 max-w-3xl min-w-3xl flex flex-col gap-3 overflow-y-scroll ${
+          className={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-1/2 ${
+            explanation === "" ? "max-w-lg min-w-lg" : "max-w-3xl min-w-3xl"
+          } flex flex-col gap-3 overflow-y-scroll ${
             dismissing
               ? "animate-settings-modal-down"
               : "animate-settings-modal-up"
@@ -103,7 +106,7 @@ const ExplainModal: React.FC<ExplainModalProps> = ({
               </div>
             </div>
           )}
-        </div>
+        </motion.div>
       </div>
     </>
   );

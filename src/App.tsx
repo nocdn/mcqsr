@@ -146,7 +146,8 @@ export default function App() {
       );
       const data = await response.json();
       setExplanation(data.choices[0].message.content);
-      // setCitations(data.citations); // Assuming citations might not exist on this model or response
+      setCitations(data.citations);
+      console.log("citations: ", data.citations);
     } catch (error) {
       console.error(error);
     }
@@ -158,12 +159,12 @@ export default function App() {
         <Sets
           sets={sets.map((set, index) => ({
             name: set.name || `Set ${index + 1}`,
-          }))} // Pass names to Sets component
+          }))}
           className="mt-16"
           selectedSet={selectedSet}
           setSelectedSet={setSelectedSet}
         />
-        {currentQuestion && ( // Conditionally render Question component
+        {currentQuestion && (
           <Question
             questionData={currentQuestion}
             className="mt-12"
