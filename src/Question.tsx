@@ -1,5 +1,5 @@
 import Option from "./Option";
-import { Sparkles } from "lucide-react";
+import { CheckCircle, Sparkles } from "lucide-react";
 import { useMemo } from "react";
 
 interface QuestionData {
@@ -28,9 +28,6 @@ export default function Question({
   onOptionClick: (questionText: string, selectedOption: string) => void;
 }) {
   const { question, options, answer } = questionData;
-
-  // log correct answer
-  console.log("correct answer:", answer);
 
   // shuffle options when question changes
   const shuffledOptions = useMemo(() => {
@@ -79,11 +76,18 @@ export default function Question({
           );
         })}
       </div>
-      <div
-        onMouseDown={onExplain}
-        className="flex items-center gap-2 mt-6 font-jetbrains-mono text-sm opacity-20 hover:opacity-60 font-medium ml-0.5 transition-opacity duration-200 cursor-pointer"
-      >
-        <Sparkles size={15} /> EXPLAIN THIS
+      <div className="flex items-center gap-6">
+        <div
+          onMouseDown={onExplain}
+          className="flex items-center gap-2 mt-6 font-jetbrains-mono text-sm opacity-20 hover:opacity-60 font-medium ml-0.5 transition-opacity duration-200 cursor-pointer"
+        >
+          <Sparkles size={15} /> EXPLAIN THIS
+        </div>
+        {hasAnswered && (
+          <div className="flex items-center mt-6 gap-2 font-jetbrains-mono text-sm font-medium ml-0.5 text-blue-600/75 motion-preset-focus">
+            <CheckCircle size={15} /> ALREADY ANSWERED
+          </div>
+        )}
       </div>
     </div>
   );

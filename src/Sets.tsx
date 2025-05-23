@@ -1,19 +1,21 @@
-import { useEffect } from "react";
+import { Settings } from "lucide-react";
 
 export default function Sets({
   sets,
   className,
   selectedSet,
   setSelectedSet,
+  onSettingsClick,
 }: {
   sets: { name: string }[];
   className?: string;
   selectedSet?: number;
   setSelectedSet?: (set: number) => void;
+  onSettingsClick?: () => void;
 }) {
   return (
     <div
-      className={`flex gap-2 opacity-20 hover:opacity-100 transition-opacity duration-200 ${className} w-5xl`}
+      className={`flex gap-2 opacity-20 hover:opacity-100 transition-opacity duration-200 ${className} w-5xl items-center`}
     >
       {sets.map((set, index) => (
         <div
@@ -29,6 +31,11 @@ export default function Sets({
           {set.name || `Set ${index + 1}`}
         </div>
       ))}
+      <Settings
+        size={20}
+        className="ml-4 cursor-pointer"
+        onClick={onSettingsClick}
+      />
     </div>
   );
 }

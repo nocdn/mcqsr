@@ -2,6 +2,7 @@ import Navbar from "./Navbar";
 import Question from "./Question";
 import Sets from "./Sets";
 import ExplainModal from "./ExplainModal";
+import SettingsModal from "./SettingsModal";
 import { useEffect, useState } from "react";
 
 interface Question {
@@ -23,6 +24,7 @@ export default function App() {
   const [selectedSet, setSelectedSet] = useState<number>(0);
   const [explanation, setExplanation] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [settingsModalOpen, setSettingsModalOpen] = useState<boolean>(false);
   const [citations, setCitations] = useState<string[]>([]);
   const [sets, setSets] = useState<Set[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -209,9 +211,9 @@ export default function App() {
             questionId: currentQuestionIndex,
           })
         );
-        console.log(
-          `Nav: Q ${currentQuestionIndex} for Set ${selectedSet}. Updated lastKnownPosition.`
-        );
+        // console.log(
+        //   `Nav: Q ${currentQuestionIndex} for Set ${selectedSet}. Updated lastKnownPosition.`
+        // );
       }
     }
   }, [currentQuestionIndex, selectedSet, sets, questions]);
@@ -316,14 +318,17 @@ export default function App() {
               ". Reset Q to 0. Updated lastKnownPosition."
             );
           }}
+          onSettingsClick={() => {
+            setSettingsModalOpen(true);
+          }}
         />
         {currentQuestion && (
           <Question
             questionData={currentQuestion}
             className="mt-12"
             isAnimating={isAnimating}
-            isEntering={isEntering}
             hasAnswered={answeredQuestions.includes(currentQuestion.question)}
+            isEntering={isEntering}
             onExplain={handleExplain}
             selectedAnswers={selectedAnswers}
             onOptionClick={handleOptionClick}
@@ -346,6 +351,21 @@ export default function App() {
             setModalOpen(false);
             setExplanation("");
             setCitations([]);
+          }}
+        />
+      )}
+      {settingsModalOpen && (
+        <SettingsModal
+          onDismiss={() => {
+            setSettingsModalOpen(false);
+          }}
+          onResetAnsweredQuestions={() => {
+            setAnsweredQuestions([]);
+            localStorage.removeItem("answeredQuestions");
+          }}
+          onResetQuestionProgress={() => {
+            setCurrentQuestionIndex(0);
+            localStorage.removeItem("lastKnownPosition");
           }}
         />
       )}
