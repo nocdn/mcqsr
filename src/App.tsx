@@ -182,9 +182,7 @@ export default function App() {
           ) {
             shouldUpdate = false;
           }
-        } catch (e) {
-          /* ignore parsing error, will overwrite */
-        }
+        } catch (e) {}
       }
 
       if (shouldUpdate) {

@@ -1,5 +1,6 @@
 import Option from "./Option";
 import { Sparkles } from "lucide-react";
+import { useMemo } from "react";
 
 interface QuestionData {
   question: string;
@@ -26,9 +27,19 @@ export default function Question({
   selectedAnswers: { [key: string]: string };
   onOptionClick: (questionText: string, selectedOption: string) => void;
 }) {
-  const { question, options, answer } = questionData; // Destructure answer as it's needed now
+  const { question, options, answer } = questionData;
 
-  // Determine animation classes based on state
+  // shuffle options when question changes
+  const shuffledOptions = useMemo(() => {
+    const arr = [...options];
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }, [question]);
+
+  // animation classes
   const animationClasses = isAnimating
     ? "motion-blur-out-sm motion-opacity-out-0 motion-duration-100"
     : isEntering
@@ -43,7 +54,7 @@ export default function Question({
     >
       <div className="text-xl font-medium mb-8">{question}</div>
       <div className="flex flex-col gap-2 w-full">
-        {options.map((optionLabel) => {
+        {shuffledOptions.map((optionLabel) => {
           let status: "correct" | "incorrect" | "default" = "default";
           if (userSelectedOption) {
             if (optionLabel === userSelectedOption) {
@@ -60,7 +71,7 @@ export default function Question({
               className="w-full"
               status={status}
               onClick={() => onOptionClick(question, optionLabel)}
-              disabled={!!userSelectedOption} // Disable options if question is answered
+              disabled={!!userSelectedOption}
             />
           );
         })}
