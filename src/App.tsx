@@ -29,6 +29,8 @@ export default function App() {
   const [selectedAnswers, setSelectedAnswers] = useState<{
     [key: string]: string;
   }>({});
+  const [showingRestoreToast, setShowingRestoreToast] =
+    useState<boolean>(false);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -83,6 +85,10 @@ export default function App() {
                   "for Set:",
                   initialSetIdx
                 );
+                setShowingRestoreToast(true);
+                setTimeout(() => {
+                  setShowingRestoreToast(false);
+                }, 1000);
               } else {
                 initialQuestionIdx = 0;
                 localStorage.setItem(
@@ -314,9 +320,10 @@ export default function App() {
         <Navbar
           onBack={handleBack}
           onNext={handleNext}
+          showingRestoreToast={showingRestoreToast}
           questionNumber={questions.length > 0 ? currentQuestionIndex + 1 : 0}
           totalQuestions={questions.length}
-          className="mt-auto mb-16 opacity-20 hover:opacity-100 transition-opacity duration-200"
+          className="mt-auto mb-16 transition-opacity duration-200"
         />
       </main>
       {modalOpen && (
