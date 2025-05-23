@@ -29,6 +29,9 @@ export default function Question({
 }) {
   const { question, options, answer } = questionData;
 
+  // log correct answer
+  console.log("correct answer:", answer);
+
   // shuffle options when question changes
   const shuffledOptions = useMemo(() => {
     const arr = [...options];

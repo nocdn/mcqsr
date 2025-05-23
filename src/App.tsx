@@ -31,8 +31,16 @@ export default function App() {
   }>({});
   const [showingRestoreToast, setShowingRestoreToast] =
     useState<boolean>(false);
+  const [consecutiveCorrect, setConsecutiveCorrect] = useState<number>(0);
 
   const currentQuestion = questions[currentQuestionIndex];
+
+  useEffect(() => {
+    if (consecutiveCorrect === 10) {
+      console.log("user got 10 correct");
+      setConsecutiveCorrect(0);
+    }
+  }, [consecutiveCorrect]);
 
   useEffect(() => {
     async function loadInitialData() {
@@ -85,10 +93,12 @@ export default function App() {
                   "for Set:",
                   initialSetIdx
                 );
-                setShowingRestoreToast(true);
+                setTimeout(() => {
+                  setShowingRestoreToast(true);
+                }, 100);
                 setTimeout(() => {
                   setShowingRestoreToast(false);
-                }, 1000);
+                }, 1100);
               } else {
                 initialQuestionIdx = 0;
                 localStorage.setItem(
@@ -221,6 +231,11 @@ export default function App() {
   function handleOptionClick(questionText: string, selectedOption: string) {
     setSelectedAnswers((prev) => ({ ...prev, [questionText]: selectedOption }));
     addAnsweredQuestion(questionText);
+    if (currentQuestion && selectedOption === currentQuestion.answer) {
+      setConsecutiveCorrect((prev) => prev + 1);
+    } else {
+      setConsecutiveCorrect(0);
+    }
   }
 
   function handleBack() {
@@ -290,7 +305,7 @@ export default function App() {
           setSelectedSet={(index) => {
             setSelectedSet(index);
             localStorage.setItem("lastSelectedSet", index.toString());
-            setCurrentQuestionIndex(0); // Reset question index for the new set
+            setCurrentQuestionIndex(0);
             localStorage.setItem(
               "lastKnownPosition",
               JSON.stringify({ setId: index, questionId: 0 })
@@ -300,9 +315,6 @@ export default function App() {
               index,
               ". Reset Q to 0. Updated lastKnownPosition."
             );
-            // setQuestions and setCurrentQuestionIndex are handled by the useEffect hook listening to selectedSet and sets.
-            // However, setting currentQuestionIndex to 0 here is crucial for the logic.
-            // The useEffect for [selectedSet, sets] will then update the questions list.
           }}
         />
         {currentQuestion && (

@@ -11,10 +11,6 @@ export default function Sets({
   selectedSet?: number;
   setSelectedSet?: (set: number) => void;
 }) {
-  useEffect(() => {
-    console.log(sets);
-  }, [sets]);
-
   return (
     <div
       className={`flex gap-2 opacity-20 hover:opacity-100 transition-opacity duration-200 ${className} w-5xl`}

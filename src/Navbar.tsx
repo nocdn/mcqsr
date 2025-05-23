@@ -31,9 +31,9 @@ export default function Navbar({
         <AnimatePresence>
           {showingRestoreToast && (
             <motion.div
-              initial={{ opacity: 0, y: 5, scale: 0.9 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 5, scale: 0.7 }}
+              initial={{ opacity: 0, y: 5, scale: 0.9, filter: "blur(6px)" }}
+              animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, y: 5, scale: 0.7, filter: "blur(6px)" }}
               transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
               className="text-green-700 flex items-center gap-1 absolute bottom-16 left-1/2 -translate-x-1/2 opacity-100 min-w-max text-center"
               style={{ whiteSpace: "nowrap" }}
