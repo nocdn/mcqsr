@@ -20,7 +20,7 @@ export default function App() {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isEntering, setIsEntering] = useState(true);
   const [answeredQuestions, setAnsweredQuestions] = useState<string[]>([]);
-  const [selectedSet, setSelectedSet] = useState<string>("");
+  const [selectedSet, setSelectedSet] = useState<number>(0);
   const [explanation, setExplanation] = useState<string>("");
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [citations, setCitations] = useState<string[]>([]);
@@ -40,10 +40,8 @@ export default function App() {
       const data: Set[] = await response.json();
       setSets(data);
       if (data.length > 0) {
-        setSelectedSet(data[0].name || "Set 1");
+        setSelectedSet(0);
       }
-      console.log(data);
-      console.log(data[0]);
     } catch (error) {
       console.error("Failed to fetch sets:", error);
     }
@@ -58,27 +56,10 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (sets.length === 0) {
-      setQuestions([]);
+    if (sets.length > 0) {
+      setQuestions(sets[selectedSet].questions);
       setCurrentQuestionIndex(0);
-      return;
     }
-
-    let foundSet = sets.find((set, index) => {
-      const setName = set.name || `Set ${index + 1}`;
-      return setName === selectedSet;
-    });
-
-    if (foundSet) {
-      setQuestions(foundSet.questions);
-    } else if (sets.length > 0) {
-      // Default to the first set if selectedSet is not found
-      setQuestions(sets[0].questions);
-      setSelectedSet(sets[0].name || "Set 1"); // Also update selectedSet to reflect this default
-    } else {
-      setQuestions([]);
-    }
-    setCurrentQuestionIndex(0);
   }, [selectedSet, sets]);
 
   function addAnsweredQuestion(questionText: string) {
@@ -162,7 +143,11 @@ export default function App() {
           }))}
           className="mt-16"
           selectedSet={selectedSet}
-          setSelectedSet={setSelectedSet}
+          setSelectedSet={(index) => {
+            setSelectedSet(index);
+            setQuestions(sets[index].questions);
+            setCurrentQuestionIndex(0);
+          }}
         />
         {currentQuestion && (
           <Question
