@@ -13,6 +13,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+html,
+body {
+  touch-action: manipulation;
+}
+
 @theme {
   --font-jetbrains-mono: "JetBrains Mono", monospace;
   --font-geist-mono: "Geist Mono", monospace;
