@@ -6,12 +6,14 @@ export default function Sets({
   selectedSet,
   setSelectedSet,
   onSettingsClick,
+  showingSettingsIcon,
 }: {
   sets: { name: string }[];
   className?: string;
   selectedSet?: number;
   setSelectedSet?: (set: number) => void;
   onSettingsClick?: () => void;
+  showingSettingsIcon?: boolean;
 }) {
   return (
     <div
@@ -33,7 +35,9 @@ export default function Sets({
       ))}
       <Settings
         size={20}
-        className="ml-4 cursor-pointer"
+        className={`ml-4 cursor-pointer ${
+          showingSettingsIcon ? "opacity-100" : "opacity-0"
+        } transition-opacity duration-200`}
         onClick={onSettingsClick}
       />
     </div>

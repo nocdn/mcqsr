@@ -4,7 +4,6 @@ import Sets from "./Sets";
 import ExplainModal from "./ExplainModal";
 import SettingsModal from "./SettingsModal";
 import { useEffect, useState } from "react";
-import { Analytics } from "@vercel/analytics/react";
 
 interface Question {
   question: string;
@@ -35,6 +34,8 @@ export default function App() {
   const [showingRestoreToast, setShowingRestoreToast] =
     useState<boolean>(false);
   const [consecutiveCorrect, setConsecutiveCorrect] = useState<number>(0);
+  const [showingSettingsIcon, setShowingSettingsIcon] =
+    useState<boolean>(false);
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -96,6 +97,7 @@ export default function App() {
                   "for Set:",
                   initialSetIdx
                 );
+                setShowingSettingsIcon(true);
                 setTimeout(() => {
                   setShowingRestoreToast(true);
                 }, 100);
@@ -322,6 +324,7 @@ export default function App() {
           onSettingsClick={() => {
             setSettingsModalOpen(true);
           }}
+          showingSettingsIcon={showingSettingsIcon}
         />
         {currentQuestion && (
           <Question
@@ -370,7 +373,6 @@ export default function App() {
           }}
         />
       )}
-      <Analytics />
     </>
   );
 }
