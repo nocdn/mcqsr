@@ -1,5 +1,5 @@
 import Navbar from "./Navbar";
-import Question from "./Question"; // Commented out as per existing code
+import Question from "./Question";
 import Sets from "./Sets";
 import ExplainModal from "./ExplainModal";
 import { useEffect, useState } from "react";
@@ -40,10 +40,35 @@ export default function App() {
       const data: Set[] = await response.json();
       setSets(data);
       if (data.length > 0) {
+        const storedSet = localStorage.getItem("lastSelectedSet");
+        let initialSetIndex = 0;
+        if (storedSet) {
+          const parsedIndex = parseInt(storedSet, 10);
+          if (parsedIndex >= 0 && parsedIndex < data.length) {
+            initialSetIndex = parsedIndex;
+            console.log(
+              "using last selected set from storage:",
+              initialSetIndex
+            );
+          } else {
+            initialSetIndex = 0;
+            localStorage.setItem("lastSelectedSet", "0");
+            console.log(
+              "stored set index out of bounds, defaulting to 0 and correcting localStorage"
+            );
+          }
+        } else {
+          console.log("no stored set, using first set (0)");
+          initialSetIndex = 0;
+        }
+        setSelectedSet(initialSetIndex);
+      } else {
         setSelectedSet(0);
       }
     } catch (error) {
       console.error("Failed to fetch sets:", error);
+      setSets([]);
+      setSelectedSet(0);
     }
   }
 
@@ -56,10 +81,22 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (sets.length > 0) {
+    if (
+      sets.length > 0 &&
+      typeof selectedSet === "number" &&
+      selectedSet >= 0 &&
+      selectedSet < sets.length
+    ) {
       setQuestions(sets[selectedSet].questions);
       setCurrentQuestionIndex(0);
+    } else if (sets.length === 0) {
+      // If there are no sets, clear questions.
+      setQuestions([]);
+      setCurrentQuestionIndex(0);
     }
+    // The localStorage saving logic has been removed from here.
+    // It's now handled when the user explicitly selects a set,
+    // or during initial load validation in fetchSets.
   }, [selectedSet, sets]);
 
   function addAnsweredQuestion(questionText: string) {
@@ -145,8 +182,11 @@ export default function App() {
           selectedSet={selectedSet}
           setSelectedSet={(index) => {
             setSelectedSet(index);
-            setQuestions(sets[index].questions);
-            setCurrentQuestionIndex(0);
+            // Save to localStorage when user explicitly changes the set
+            localStorage.setItem("lastSelectedSet", index.toString());
+            console.log("User selected set, saving to localStorage:", index);
+            // setQuestions and setCurrentQuestionIndex are removed from here;
+            // they are handled by the useEffect hook listening to selectedSet and sets.
           }}
         />
         {currentQuestion && (
