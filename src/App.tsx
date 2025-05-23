@@ -32,52 +32,118 @@ export default function App() {
 
   const currentQuestion = questions[currentQuestionIndex];
 
-  async function fetchSets() {
-    try {
-      const response = await fetch(
-        "https://4mu4p3ymqfloak377n6whzywpy0jcfki.lambda-url.eu-west-2.on.aws/namedsets"
-      );
-      const data: Set[] = await response.json();
-      setSets(data);
-      if (data.length > 0) {
+  useEffect(() => {
+    async function loadInitialData() {
+      try {
+        const response = await fetch(
+          "https://4mu4p3ymqfloak377n6whzywpy0jcfki.lambda-url.eu-west-2.on.aws/namedsets"
+        );
+        const fetchedSets: Set[] = await response.json();
+        setSets(fetchedSets);
+
+        let initialSetIdx = 0;
         const storedSet = localStorage.getItem("lastSelectedSet");
-        let initialSetIndex = 0;
         if (storedSet) {
           const parsedIndex = parseInt(storedSet, 10);
-          if (parsedIndex >= 0 && parsedIndex < data.length) {
-            initialSetIndex = parsedIndex;
-            console.log(
-              "using last selected set from storage:",
-              initialSetIndex
-            );
+          if (
+            parsedIndex >= 0 &&
+            fetchedSets.length > 0 &&
+            parsedIndex < fetchedSets.length
+          ) {
+            initialSetIdx = parsedIndex;
           } else {
-            initialSetIndex = 0;
-            localStorage.setItem("lastSelectedSet", "0");
+            initialSetIdx = 0;
+            if (fetchedSets.length > 0) {
+              localStorage.setItem("lastSelectedSet", "0");
+            } else {
+              localStorage.removeItem("lastSelectedSet");
+            }
+          }
+        } else if (fetchedSets.length > 0) {
+          localStorage.setItem("lastSelectedSet", "0");
+        }
+
+        let initialQuestionIdx = 0;
+        const lastKnownPositionStr = localStorage.getItem("lastKnownPosition");
+
+        if (fetchedSets.length > 0) {
+          if (lastKnownPositionStr) {
+            try {
+              const lastPos = JSON.parse(lastKnownPositionStr);
+              if (
+                lastPos.setId === initialSetIdx &&
+                fetchedSets[initialSetIdx]?.questions &&
+                lastPos.questionId >= 0 &&
+                lastPos.questionId < fetchedSets[initialSetIdx].questions.length
+              ) {
+                initialQuestionIdx = lastPos.questionId;
+                console.log(
+                  "Restored Q:",
+                  initialQuestionIdx,
+                  "for Set:",
+                  initialSetIdx
+                );
+              } else {
+                initialQuestionIdx = 0;
+                localStorage.setItem(
+                  "lastKnownPosition",
+                  JSON.stringify({ setId: initialSetIdx, questionId: 0 })
+                );
+                console.log(
+                  "Mismatch/invalid lastKnownPosition. Resetting Q to 0 for Set:",
+                  initialSetIdx
+                );
+              }
+            } catch (e) {
+              initialQuestionIdx = 0;
+              localStorage.setItem(
+                "lastKnownPosition",
+                JSON.stringify({ setId: initialSetIdx, questionId: 0 })
+              );
+              console.error("Error parsing lastKnownPosition. Resetting.", e);
+            }
+          } else {
+            initialQuestionIdx = 0;
+            localStorage.setItem(
+              "lastKnownPosition",
+              JSON.stringify({ setId: initialSetIdx, questionId: 0 })
+            );
             console.log(
-              "stored set index out of bounds, defaulting to 0 and correcting localStorage"
+              "No lastKnownPosition. Initializing Q to 0 for Set:",
+              initialSetIdx
             );
           }
-        } else {
-          console.log("no stored set, using first set (0)");
-          initialSetIndex = 0;
-        }
-        setSelectedSet(initialSetIndex);
-      } else {
-        setSelectedSet(0);
-      }
-    } catch (error) {
-      console.error("Failed to fetch sets:", error);
-      setSets([]);
-      setSelectedSet(0);
-    }
-  }
 
-  useEffect(() => {
+          setSelectedSet(initialSetIdx);
+          if (fetchedSets[initialSetIdx]?.questions) {
+            setQuestions(fetchedSets[initialSetIdx].questions);
+          } else {
+            setQuestions([]);
+          }
+          setCurrentQuestionIndex(initialQuestionIdx);
+        } else {
+          setQuestions([]);
+          setSelectedSet(0);
+          setCurrentQuestionIndex(0);
+          localStorage.removeItem("lastSelectedSet");
+          localStorage.removeItem("lastKnownPosition");
+        }
+      } catch (error) {
+        console.error("Failed to fetch initial data:", error);
+        setSets([]);
+        setQuestions([]);
+        setSelectedSet(0);
+        setCurrentQuestionIndex(0);
+        localStorage.removeItem("lastSelectedSet");
+        localStorage.removeItem("lastKnownPosition");
+      }
+    }
+
     const storedAnsweredQuestions = localStorage.getItem("answeredQuestions");
     if (storedAnsweredQuestions) {
       setAnsweredQuestions(JSON.parse(storedAnsweredQuestions));
     }
-    fetchSets();
+    loadInitialData();
   }, []);
 
   useEffect(() => {
@@ -87,17 +153,54 @@ export default function App() {
       selectedSet >= 0 &&
       selectedSet < sets.length
     ) {
-      setQuestions(sets[selectedSet].questions);
-      setCurrentQuestionIndex(0);
+      setQuestions(sets[selectedSet].questions || []);
     } else if (sets.length === 0) {
-      // If there are no sets, clear questions.
       setQuestions([]);
       setCurrentQuestionIndex(0);
     }
-    // The localStorage saving logic has been removed from here.
-    // It's now handled when the user explicitly selects a set,
-    // or during initial load validation in fetchSets.
   }, [selectedSet, sets]);
+
+  // effect to save current question index on navigation
+  useEffect(() => {
+    if (
+      sets.length > 0 &&
+      typeof selectedSet === "number" &&
+      selectedSet >= 0 &&
+      selectedSet < sets.length &&
+      questions.length > 0 &&
+      currentQuestionIndex >= 0 &&
+      currentQuestionIndex < questions.length
+    ) {
+      const currentStoredPosStr = localStorage.getItem("lastKnownPosition");
+      let shouldUpdate = true;
+      if (currentStoredPosStr) {
+        try {
+          const currentStoredPos = JSON.parse(currentStoredPosStr);
+          if (
+            currentStoredPos.setId === selectedSet &&
+            currentStoredPos.questionId === currentQuestionIndex
+          ) {
+            shouldUpdate = false;
+          }
+        } catch (e) {
+          /* ignore parsing error, will overwrite */
+        }
+      }
+
+      if (shouldUpdate) {
+        localStorage.setItem(
+          "lastKnownPosition",
+          JSON.stringify({
+            setId: selectedSet,
+            questionId: currentQuestionIndex,
+          })
+        );
+        console.log(
+          `Nav: Q ${currentQuestionIndex} for Set ${selectedSet}. Updated lastKnownPosition.`
+        );
+      }
+    }
+  }, [currentQuestionIndex, selectedSet, sets, questions]);
 
   function addAnsweredQuestion(questionText: string) {
     // Avoid adding duplicates if already answered
@@ -182,11 +285,20 @@ export default function App() {
           selectedSet={selectedSet}
           setSelectedSet={(index) => {
             setSelectedSet(index);
-            // Save to localStorage when user explicitly changes the set
             localStorage.setItem("lastSelectedSet", index.toString());
-            console.log("User selected set, saving to localStorage:", index);
-            // setQuestions and setCurrentQuestionIndex are removed from here;
-            // they are handled by the useEffect hook listening to selectedSet and sets.
+            setCurrentQuestionIndex(0); // Reset question index for the new set
+            localStorage.setItem(
+              "lastKnownPosition",
+              JSON.stringify({ setId: index, questionId: 0 })
+            );
+            console.log(
+              "User selected Set:",
+              index,
+              ". Reset Q to 0. Updated lastKnownPosition."
+            );
+            // setQuestions and setCurrentQuestionIndex are handled by the useEffect hook listening to selectedSet and sets.
+            // However, setting currentQuestionIndex to 0 here is crucial for the logic.
+            // The useEffect for [selectedSet, sets] will then update the questions list.
           }}
         />
         {currentQuestion && (
