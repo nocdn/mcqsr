@@ -4,6 +4,7 @@ import Sets from "./Sets";
 import ExplainModal from "./ExplainModal";
 import SettingsModal from "./SettingsModal";
 import { useEffect, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 interface Question {
   question: string;
@@ -369,6 +370,7 @@ export default function App() {
           }}
         />
       )}
+      <Analytics />
     </>
   );
 }
