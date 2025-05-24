@@ -68,7 +68,7 @@ const FeedbackModal: React.FC<SettingsModalProps> = ({
           role="button"
           tabIndex={0}
           onMouseDown={(e) => e.stopPropagation()}
-          className={`bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl w-1/2 max-w-lg min-w-lg flex flex-col gap-3 overflow-y-scroll ${
+          className={`bg-white p-6 rounded-lg shadow-xl w-1/2 max-w-lg min-w-lg flex flex-col gap-3 overflow-y-scroll ${
             dismissing
               ? "animate-settings-modal-down"
               : "animate-settings-modal-up"
