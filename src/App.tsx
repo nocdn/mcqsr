@@ -37,6 +37,8 @@ export default function App() {
   const [consecutiveCorrect, setConsecutiveCorrect] = useState<number>(0);
   const [showingSettingsIcon, setShowingSettingsIcon] =
     useState<boolean>(false);
+  const [showingFeedbackIcon, setShowingFeedbackIcon] =
+    useState<boolean>(false);
   const [feedbackModalOpen, setFeedbackModalOpen] = useState<boolean>(false);
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -98,7 +100,14 @@ export default function App() {
                   "for Set:",
                   initialSetIdx
                 );
-                setShowingSettingsIcon(true);
+                setTimeout(() => {
+                  console.log("showing settings icon");
+                  setShowingSettingsIcon(true);
+                }, 100);
+                setTimeout(() => {
+                  console.log("showing feedback icon");
+                  setShowingFeedbackIcon(true);
+                }, 200);
                 setTimeout(() => {
                   setShowingRestoreToast(true);
                 }, 100);
@@ -326,6 +335,7 @@ export default function App() {
             setSettingsModalOpen(true);
           }}
           showingSettingsIcon={showingSettingsIcon}
+          showingFeedbackIcon={showingFeedbackIcon}
           openFeedbackModal={() => {
             setFeedbackModalOpen(true);
           }}

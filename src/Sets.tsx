@@ -7,6 +7,7 @@ export default function Sets({
   setSelectedSet,
   onSettingsClick,
   showingSettingsIcon,
+  showingFeedbackIcon,
   openFeedbackModal,
 }: {
   sets: { name: string }[];
@@ -15,6 +16,7 @@ export default function Sets({
   setSelectedSet?: (set: number) => void;
   onSettingsClick?: () => void;
   showingSettingsIcon?: boolean;
+  showingFeedbackIcon?: boolean;
   openFeedbackModal?: () => void;
 }) {
   return (
@@ -35,22 +37,22 @@ export default function Sets({
           {set.name || `Set ${index + 1}`}
         </div>
       ))}
-      <Settings
-        size={20}
-        className={`ml-4 cursor-pointer ${
-          showingSettingsIcon ? "opacity-100" : "opacity-0"
-        } transition-opacity duration-200`}
-        onClick={onSettingsClick}
-      />
-      <MailQuestion
-        size={20}
-        className={`ml-4 cursor-pointer ${
-          showingSettingsIcon ? "opacity-100" : "opacity-0"
-        } transition-opacity duration-200`}
-        onClick={() => {
-          openFeedbackModal?.();
-        }}
-      />
+      {showingSettingsIcon && (
+        <Settings
+          size={20}
+          className={`ml-4 cursor-pointer motion-preset-focus`}
+          onClick={onSettingsClick}
+        />
+      )}
+      {showingFeedbackIcon && (
+        <MailQuestion
+          size={20}
+          className={`ml-4 cursor-pointer motion-preset-focus`}
+          onClick={() => {
+            openFeedbackModal?.();
+          }}
+        />
+      )}
     </div>
   );
 }

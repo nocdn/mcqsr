@@ -68,7 +68,7 @@ const FeedbackModal: React.FC<SettingsModalProps> = ({
           role="button"
           tabIndex={0}
           onMouseDown={(e) => e.stopPropagation()}
-          className={`bg-white p-6 rounded-lg shadow-xl w-1/2 max-w-lg min-w-lg flex flex-col gap-3 overflow-y-scroll ${
+          className={`bg-white p-6 rounded-lg shadow-xl w-1/2 max-w-lg min-w-lg flex flex-col gap-3 overflow-y-hidden ${
             dismissing
               ? "animate-settings-modal-down"
               : "animate-settings-modal-up"
@@ -83,14 +83,19 @@ const FeedbackModal: React.FC<SettingsModalProps> = ({
             />
           </p>
           <p className="text-sm text-gray-600">
-            Please share any suggestions for features, improvements, or issues.
-            Keep in mind, I love working on this so don't hold back! Just make
-            sure to be descriptive.
+            Please share any suggestions for features, improvements, or issues
+            you come across. Keep in mind, I love working on this so don't hold
+            back! Just make sure to be descriptive.
           </p>
           <textarea
-            className="w-full h-32 p-2 border border-gray-300 rounded-md font-geist"
+            className="w-full h-38 p-2 border border-gray-300 rounded-md font-geist focus:outline-blue-700/15 focus:ring-offset-0"
             value={feedback}
             onChange={(e) => setFeedback(e.target.value)}
+            placeholder="For example:
+
+Please add more questions on perception and cognition
+The explain feature could be improved by adding a follow up question input box.
+"
           />
           <div className="flex items-center gap-2">
             <Button

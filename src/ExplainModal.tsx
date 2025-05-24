@@ -53,7 +53,7 @@ const ExplainModal: React.FC<ExplainModalProps> = ({
           onMouseDown={(e) => e.stopPropagation()}
           className={`bg-white p-6 rounded-lg shadow-xl w-1/2 ${
             explanation === "" ? "max-w-lg min-w-lg" : "max-w-3xl min-w-3xl"
-          } flex flex-col gap-3 overflow-y-scroll ${
+          } flex flex-col gap-3 overflow-y-hidden ${
             dismissing
               ? "animate-settings-modal-down"
               : "animate-settings-modal-up"
