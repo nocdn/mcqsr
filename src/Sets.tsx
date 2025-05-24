@@ -1,4 +1,4 @@
-import { Settings } from "lucide-react";
+import { Settings, MailQuestion } from "lucide-react";
 
 export default function Sets({
   sets,
@@ -7,6 +7,7 @@ export default function Sets({
   setSelectedSet,
   onSettingsClick,
   showingSettingsIcon,
+  openFeedbackModal,
 }: {
   sets: { name: string }[];
   className?: string;
@@ -14,6 +15,7 @@ export default function Sets({
   setSelectedSet?: (set: number) => void;
   onSettingsClick?: () => void;
   showingSettingsIcon?: boolean;
+  openFeedbackModal?: () => void;
 }) {
   return (
     <div
@@ -39,6 +41,15 @@ export default function Sets({
           showingSettingsIcon ? "opacity-100" : "opacity-0"
         } transition-opacity duration-200`}
         onClick={onSettingsClick}
+      />
+      <MailQuestion
+        size={20}
+        className={`ml-4 cursor-pointer ${
+          showingSettingsIcon ? "opacity-100" : "opacity-0"
+        } transition-opacity duration-200`}
+        onClick={() => {
+          openFeedbackModal?.();
+        }}
       />
     </div>
   );

@@ -4,6 +4,7 @@ import Sets from "./Sets";
 import ExplainModal from "./ExplainModal";
 import SettingsModal from "./SettingsModal";
 import { useEffect, useState } from "react";
+import FeedbackModal from "./FeedbackModal";
 
 interface Question {
   question: string;
@@ -36,7 +37,7 @@ export default function App() {
   const [consecutiveCorrect, setConsecutiveCorrect] = useState<number>(0);
   const [showingSettingsIcon, setShowingSettingsIcon] =
     useState<boolean>(false);
-
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState<boolean>(false);
   const currentQuestion = questions[currentQuestionIndex];
 
   useEffect(() => {
@@ -325,6 +326,9 @@ export default function App() {
             setSettingsModalOpen(true);
           }}
           showingSettingsIcon={showingSettingsIcon}
+          openFeedbackModal={() => {
+            setFeedbackModalOpen(true);
+          }}
         />
         {currentQuestion && (
           <Question
@@ -370,6 +374,13 @@ export default function App() {
           onResetQuestionProgress={() => {
             setCurrentQuestionIndex(0);
             localStorage.removeItem("lastKnownPosition");
+          }}
+        />
+      )}
+      {feedbackModalOpen && (
+        <FeedbackModal
+          onDismiss={() => {
+            setFeedbackModalOpen(false);
           }}
         />
       )}
