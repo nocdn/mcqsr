@@ -38,20 +38,36 @@ export default function Sets({
         </div>
       ))}
       {showingSettingsIcon && (
-        <Settings
-          size={20}
-          className={`ml-4 cursor-pointer motion-preset-focus`}
-          onClick={onSettingsClick}
-        />
+        <div
+          className="relative inline-flex items-center ml-4 group"
+          title="Settings"
+        >
+          <Settings
+            size={20}
+            className={`cursor-pointer motion-preset-focus`}
+            onClick={onSettingsClick}
+          />
+          <div className="absolute bottom-9 left-1/2 transform -translate-x-1/2 w-fit h-fit px-2 py-1 text-xs bg-white border border-gray-200 shadow-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-plex-mono">
+            Settings
+          </div>
+        </div>
       )}
       {showingFeedbackIcon && (
-        <MailQuestion
-          size={20}
-          className={`ml-4 cursor-pointer motion-preset-focus`}
-          onClick={() => {
-            openFeedbackModal?.();
-          }}
-        />
+        <div
+          className="relative inline-flex items-center ml-4 group"
+          title="Feedback"
+        >
+          <MailQuestion
+            size={20}
+            className={`cursor-pointer motion-preset-focus`}
+            onClick={() => {
+              openFeedbackModal?.();
+            }}
+          />
+          <div className="absolute bottom-9 left-1/2 transform -translate-x-1/2 w-fit h-fit px-2 py-1 text-xs bg-white border border-gray-200 shadow-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-plex-mono">
+            Feedback
+          </div>
+        </div>
       )}
     </div>
   );
