@@ -50,9 +50,11 @@ export default function Question({
 
   return (
     <div
-      className={`max-w-5xl min-w-5xl flex flex-col gap-2 ${className} ${animationClasses}`}
+      className={`w-full sm:max-w-5xl sm:min-w-5xl flex flex-col gap-2 px-4 sm:px-0 ${className} ${animationClasses}`}
     >
-      <div className="text-xl font-medium mb-8">{question}</div>
+      <div className="text-base sm:text-xl font-medium mb-4 sm:mb-8">
+        {question}
+      </div>
       <div className="flex flex-col gap-2 w-full">
         {shuffledOptions.map((optionLabel) => {
           let status: "correct" | "incorrect" | "default" = "default";
@@ -68,7 +70,7 @@ export default function Question({
             <Option
               key={optionLabel}
               label={optionLabel}
-              className="w-full"
+              className="w-full text-sm sm:text-base"
               status={status}
               onClick={() => onOptionClick(question, optionLabel)}
               disabled={!!userSelectedOption}
@@ -79,7 +81,7 @@ export default function Question({
       <div className="flex items-center gap-6">
         <div
           onMouseDown={onExplain}
-          className="flex items-center gap-2 mt-6 font-jetbrains-mono text-sm opacity-20 hover:opacity-60 font-medium ml-0.5 transition-opacity duration-200 cursor-pointer"
+          className="hidden sm:flex items-center gap-2 mt-6 font-jetbrains-mono text-sm opacity-20 hover:opacity-60 font-medium ml-0.5 transition-opacity duration-200 cursor-pointer"
         >
           <Sparkles size={15} /> EXPLAIN THIS
         </div>

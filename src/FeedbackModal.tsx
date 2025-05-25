@@ -21,20 +21,16 @@ const FeedbackModal: React.FC<SettingsModalProps> = ({
     setIsSubmitting(true);
     setIsSubmitted(false);
 
-    const response = await fetch(
-      "https://vdkpzy2ervdn3ycyd6z276tzky0retcl.lambda-url.eu-west-2.on.aws/",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          subject: "MCQS Feedback",
-          html_body: feedback,
-          to: ["bartek.bak@protonmail.com"],
-        }),
-      }
-    );
+    const response = await fetch("http://ip.bartoszbak.org:7480/feedback", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        html_body: feedback,
+        to: ["bartek.bak@protonmail.com"],
+      }),
+    });
 
     if (response.ok) {
       console.log("Feedback submitted successfully");

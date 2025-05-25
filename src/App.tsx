@@ -278,33 +278,40 @@ export default function App() {
   }
 
   async function handleExplain() {
-    if (!currentQuestion) return; // Add guard clause for undefined currentQuestion
+    if (!currentQuestion) return;
     setModalOpen(true);
     const questionText = currentQuestion.question;
     const answerText = currentQuestion.answer;
-    const prompt = `Please explain clearly and in simple terms but without being too verbose, why the answer to the question ${questionText} is ${answerText}. Do not use markdown. Just plain text`;
+
     try {
-      const response = await fetch(
-        "https://api.perplexity.ai/chat/completions",
-        {
-          method: "POST",
-          headers: {
-            "content-type": "application/json",
-            accept: "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_PERPLEXITY_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "sonar-pro",
-            messages: [{ role: "user", content: prompt }],
-          }),
-        }
-      );
+      const response = await fetch("http://ip.bartoszbak.org:7480/explain", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          question: questionText,
+          correct_answer: answerText,
+        }),
+      });
+
+      if (!response.ok) {
+        console.error(
+          "proxy /explain error:",
+          response.status,
+          await response.text()
+        );
+        return;
+      }
+
       const data = await response.json();
-      setExplanation(data.choices[0].message.content);
-      setCitations(data.citations);
-      console.log("citations: ", data.citations);
-    } catch (error) {
-      console.error(error);
+      // data is exactly what the Perplexity API returned
+      setExplanation(data.choices?.[0]?.message?.content || "");
+      setCitations(data.citations || []);
+      console.log("citations:", data.citations);
+    } catch (err) {
+      console.error("network error calling /explain:", err);
     }
   }
 
@@ -315,7 +322,7 @@ export default function App() {
           sets={sets.map((set, index) => ({
             name: set.name || `General ${index + 1}`,
           }))}
-          className="mt-16"
+          className="mt-8 sm:mt-16"
           selectedSet={selectedSet}
           setSelectedSet={(index) => {
             setSelectedSet(index);
@@ -343,7 +350,7 @@ export default function App() {
         {currentQuestion && (
           <Question
             questionData={currentQuestion}
-            className="mt-12"
+            className="mt-4 sm:mt-12"
             isAnimating={isAnimating}
             hasAnswered={answeredQuestions.includes(currentQuestion.question)}
             isEntering={isEntering}
@@ -358,7 +365,7 @@ export default function App() {
           showingRestoreToast={showingRestoreToast}
           questionNumber={questions.length > 0 ? currentQuestionIndex + 1 : 0}
           totalQuestions={questions.length}
-          className="mt-auto mb-16 transition-opacity duration-200"
+          className="mt-auto mb-5 sm:mb-16 transition-opacity duration-200"
         />
       </main>
       {modalOpen && (

@@ -19,32 +19,60 @@ export default function Sets({
   showingFeedbackIcon?: boolean;
   openFeedbackModal?: () => void;
 }) {
+  const selectedIndex = selectedSet ?? 0;
+  const currentName = sets[selectedIndex]?.name || `Set ${selectedIndex + 1}`;
+
   return (
     <div
-      className={`flex gap-2 opacity-20 hover:opacity-100 transition-opacity duration-200 ${className} w-5xl items-center`}
+      className={`flex items-center gap-2 ${className} w-full sm:w-auto px-4 sm:px-0`}
     >
-      {sets.map((set, index) => (
-        <div
-          className={`px-4 py-2 rounded-lg border-gray-200 hover:border-gray-400 border-[1.5px] hover:bg-gray-50 cursor-pointer ${
-            selectedSet === index ? "border-gray-400" : "border-gray-200"
-          }`}
-          key={index}
-          onClick={() => {
-            console.log("setting set to", index);
-            setSelectedSet?.(index);
+      {/* mobile: current set selector */}
+      <div className="relative block sm:hidden opacity-35">
+        <div className="px-4 py-2 rounded-lg border border-gray-200 bg-white font-jetbrains-mono cursor-pointer">
+          {currentName}
+        </div>
+        <select
+          className="absolute inset-0 w-full h-full opacity-0 cursor-pointer rounded-lg"
+          value={selectedIndex}
+          onChange={(e) => {
+            const idx = parseInt(e.target.value, 10);
+            setSelectedSet?.(idx);
           }}
         >
-          {set.name || `Set ${index + 1}`}
-        </div>
-      ))}
+          {sets.map((set, index) => (
+            <option key={index} value={index}>
+              {set.name || `Set ${index + 1}`}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* desktop: button list */}
+      <div className="hidden sm:flex gap-2 opacity-20 hover:opacity-100 transition-opacity duration-200 items-center max-w-5xl">
+        {sets.map((set, index) => (
+          <div
+            key={index}
+            className={`px-4 py-2 rounded-lg border-[1.5px] cursor-pointer ${
+              selectedSet === index ? "border-gray-400" : "border-gray-200"
+            } hover:bg-gray-50 hover:border-gray-400`}
+            onClick={() => {
+              setSelectedSet?.(index);
+            }}
+          >
+            {set.name || `Set ${index + 1}`}
+          </div>
+        ))}
+      </div>
+
+      {/* settings icon */}
       {showingSettingsIcon && (
         <div
-          className="relative inline-flex items-center ml-4 group"
+          className="hidden sm:inline-flex relative items-center ml-2 sm:ml-4 group"
           title="Settings"
         >
           <Settings
             size={20}
-            className={`cursor-pointer motion-preset-focus`}
+            className="cursor-pointer motion-preset-focus"
             onClick={onSettingsClick}
           />
           <div className="absolute bottom-9 left-1/2 transform -translate-x-1/2 w-fit h-fit px-2 py-1 text-xs bg-white border border-gray-200 shadow-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-plex-mono">
@@ -52,17 +80,17 @@ export default function Sets({
           </div>
         </div>
       )}
+
+      {/* feedback icon */}
       {showingFeedbackIcon && (
         <div
-          className="relative inline-flex items-center ml-4 group"
+          className="hidden sm:inline-flex relative items-center ml-2 sm:ml-4 group"
           title="Feedback"
         >
           <MailQuestion
             size={20}
-            className={`cursor-pointer motion-preset-focus`}
-            onClick={() => {
-              openFeedbackModal?.();
-            }}
+            className="cursor-pointer motion-preset-focus"
+            onClick={() => openFeedbackModal?.()}
           />
           <div className="absolute bottom-9 left-1/2 transform -translate-x-1/2 w-fit h-fit px-2 py-1 text-xs bg-white border border-gray-200 shadow-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-plex-mono">
             Feedback
