@@ -86,7 +86,7 @@ export default function Question({
           <Sparkles size={15} /> EXPLAIN THIS
         </div>
         {hasAnswered && (
-          <div className="flex items-center mt-6 gap-2 font-jetbrains-mono text-sm font-medium ml-0.5 text-blue-600/75 motion-preset-focus">
+          <div className="flex items-center mt-3 sm:mt-6 gap-2 font-jetbrains-mono text-sm font-medium text-blue-600/75 motion-preset-focus ml-1 sm:ml-0.5">
             <CheckCircle size={15} /> ALREADY ANSWERED
           </div>
         )}
