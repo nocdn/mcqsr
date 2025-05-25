@@ -24,7 +24,7 @@ export default function Sets({
 
   return (
     <div
-      className={`flex items-center gap-2 ${className} w-full sm:w-auto px-4 sm:px-0`}
+      className={`flex items-center gap-2 ${className} w-full sm:w-5xl px-4 sm:px-0`}
     >
       {/* mobile: current set selector */}
       <div className="relative block sm:hidden opacity-35">
