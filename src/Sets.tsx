@@ -72,7 +72,7 @@ export default function Sets({
         >
           <Settings
             size={20}
-            className="cursor-pointer motion-preset-focus"
+            className="cursor-pointer motion-preset-focus opacity-20 hover:opacity-100 transition-opacity duration-200"
             onClick={onSettingsClick}
           />
           <div className="absolute bottom-9 left-1/2 transform -translate-x-1/2 w-fit h-fit px-2 py-1 text-xs bg-white border border-gray-200 shadow-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-plex-mono">
@@ -89,7 +89,7 @@ export default function Sets({
         >
           <MailQuestion
             size={20}
-            className="cursor-pointer motion-preset-focus"
+            className="cursor-pointer motion-preset-focus opacity-20 hover:opacity-100 transition-opacity duration-200"
             onClick={() => openFeedbackModal?.()}
           />
           <div className="absolute bottom-9 left-1/2 transform -translate-x-1/2 w-fit h-fit px-2 py-1 text-xs bg-white border border-gray-200 shadow-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-plex-mono">

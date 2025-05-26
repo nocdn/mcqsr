@@ -284,7 +284,7 @@ export default function App() {
     const answerText = currentQuestion.answer;
 
     try {
-      const response = await fetch("http://ip.bartoszbak.org:7480/explain", {
+      const response = await fetch("https://mcqsproxy.bartoszbak.org/explain", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
