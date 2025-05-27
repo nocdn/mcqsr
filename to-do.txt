@@ -1,0 +1,2 @@
+- remove animations if user has prefer reduced motion. this can be done with motion-safe: prefix
+- after completing the last question in the set, show the ones you got wrong, and offer to try only those again.
