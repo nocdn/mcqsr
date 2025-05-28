@@ -35,10 +35,6 @@ export default function App() {
   const [showingRestoreToast, setShowingRestoreToast] =
     useState<boolean>(false);
   const [consecutiveCorrect, setConsecutiveCorrect] = useState<number>(0);
-  const [showingSettingsIcon, setShowingSettingsIcon] =
-    useState<boolean>(false);
-  const [showingFeedbackIcon, setShowingFeedbackIcon] =
-    useState<boolean>(false);
   const [feedbackModalOpen, setFeedbackModalOpen] = useState<boolean>(false);
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -341,8 +337,6 @@ export default function App() {
           onSettingsClick={() => {
             setSettingsModalOpen(true);
           }}
-          showingSettingsIcon={showingSettingsIcon}
-          showingFeedbackIcon={showingFeedbackIcon}
           openFeedbackModal={() => {
             setFeedbackModalOpen(true);
           }}

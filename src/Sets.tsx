@@ -1,4 +1,6 @@
 import { Settings, MailQuestion } from "lucide-react";
+import { useEffect, useState } from "react";
+import { animate, stagger } from "motion";
 
 export default function Sets({
   sets,
@@ -6,8 +8,6 @@ export default function Sets({
   selectedSet,
   setSelectedSet,
   onSettingsClick,
-  showingSettingsIcon,
-  showingFeedbackIcon,
   openFeedbackModal,
 }: {
   sets: { name: string }[];
@@ -15,12 +15,28 @@ export default function Sets({
   selectedSet?: number;
   setSelectedSet?: (set: number) => void;
   onSettingsClick?: () => void;
-  showingSettingsIcon?: boolean;
-  showingFeedbackIcon?: boolean;
   openFeedbackModal?: () => void;
 }) {
   const selectedIndex = selectedSet ?? 0;
   const currentName = sets[selectedIndex]?.name || `Set ${selectedIndex + 1}`;
+  const [showingSettingsIcon, setShowingSettingsIcon] = useState(false);
+  const [showingFeedbackIcon, setShowingFeedbackIcon] = useState(false);
+
+  useEffect(() => {
+    const buttons = document.querySelectorAll(".set-button-desktop");
+    if (buttons.length > 0) {
+      animate(
+        buttons,
+        { opacity: [0, 1] },
+        { delay: stagger(0.05), duration: 0.3, easing: "ease-out" }
+      ).finished.then(() => {
+        setShowingSettingsIcon(true);
+        setTimeout(() => {
+          setShowingFeedbackIcon(true);
+        }, 50);
+      });
+    }
+  }, [sets]);
 
   return (
     <div
@@ -52,12 +68,13 @@ export default function Sets({
         {sets.map((set, index) => (
           <div
             key={index}
-            className={`px-4 py-2 rounded-lg border-[1.5px] cursor-pointer ${
+            className={`set-button-desktop px-4 py-2 rounded-lg border-[1.5px] cursor-pointer ${
               selectedSet === index ? "border-gray-400" : "border-gray-200"
             } hover:bg-gray-50 hover:border-gray-400`}
             onClick={() => {
               setSelectedSet?.(index);
             }}
+            style={{ opacity: 0 }}
           >
             {set.name || `Set ${index + 1}`}
           </div>

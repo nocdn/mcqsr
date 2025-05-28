@@ -37,6 +37,7 @@ export default function Button({
       whileTap={{ scale: 0.95 }}
       whileHover={{ boxShadow: "0px 0px 0px 1px rgba(0, 0, 0, 0.1)" }}
       onHoverStart={() => {}}
+      layout="size"
       style={{
         backgroundColor: backgroundColor,
       }}

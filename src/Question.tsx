@@ -41,9 +41,9 @@ export default function Question({
 
   // animation classes
   const animationClasses = isAnimating
-    ? "motion-blur-out-sm motion-opacity-out-0 motion-duration-100"
+    ? "motion-safe:motion-blur-out-sm motion-safe:motion-opacity-out-0 motion-safe:motion-duration-100"
     : isEntering
-    ? "motion-preset-focus"
+    ? "motion-safe:motion-preset-focus"
     : "";
 
   const userSelectedOption = selectedAnswers[question];
