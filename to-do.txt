@@ -1,1 +1,5 @@
-- after completing the last question in the set, show the ones you got wrong, and offer to try only those again.
+after completing the last question in the set, the "next" button should be replaced with a "review" button.
+when clicked, it should show you a score of how many you got right, and wrong, and offers to try the wrong ones only
+for that, it will store the answers that you're getting correct, and ones youre getting wrong, includong their count
+then it changes the questions array to just have the wrong ones.
+then, when pressing on any of the sets buttons, it should stop doing the wrong questions, and load the questions from that set

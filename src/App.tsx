@@ -5,6 +5,7 @@ import ExplainModal from "./ExplainModal";
 import SettingsModal from "./SettingsModal";
 import { useEffect, useState } from "react";
 import FeedbackModal from "./FeedbackModal";
+import Summary from "./Summary";
 
 interface Question {
   question: string;
@@ -96,14 +97,6 @@ export default function App() {
                   "for Set:",
                   initialSetIdx
                 );
-                setTimeout(() => {
-                  console.log("showing settings icon");
-                  setShowingSettingsIcon(true);
-                }, 100);
-                setTimeout(() => {
-                  console.log("showing feedback icon");
-                  setShowingFeedbackIcon(true);
-                }, 200);
                 setTimeout(() => {
                   setShowingRestoreToast(true);
                 }, 100);
@@ -342,15 +335,22 @@ export default function App() {
           }}
         />
         {currentQuestion && (
-          <Question
-            questionData={currentQuestion}
-            className="mt-4 sm:mt-12"
-            isAnimating={isAnimating}
-            hasAnswered={answeredQuestions.includes(currentQuestion.question)}
-            isEntering={isEntering}
-            onExplain={handleExplain}
-            selectedAnswers={selectedAnswers}
-            onOptionClick={handleOptionClick}
+          // <Question
+          //   questionData={currentQuestion}
+          //   className="mt-4 sm:mt-12"
+          //   isAnimating={isAnimating}
+          //   hasAnswered={answeredQuestions.includes(currentQuestion.question)}
+          //   isEntering={isEntering}
+          //   onExplain={handleExplain}
+          //   selectedAnswers={selectedAnswers}
+          //   onOptionClick={handleOptionClick}
+          // />
+          <Summary
+            correct={10}
+            incorrect={2}
+            onTryWrongOnly={() => {
+              console.log("try wrong only");
+            }}
           />
         )}
         <Navbar
