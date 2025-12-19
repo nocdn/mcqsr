@@ -1,11 +1,10 @@
-import Option from "./Option";
-import { CheckCircle, Sparkles } from "lucide-react";
-import { useMemo } from "react";
+import Option from "./Option"
+import { CheckCircle, Sparkles } from "lucide-react"
 
 interface QuestionData {
-  question: string;
-  options: string[];
-  answer: string;
+  question: string
+  options: string[]
+  answer: string
 }
 
 export default function Question({
@@ -18,35 +17,25 @@ export default function Question({
   selectedAnswers,
   onOptionClick,
 }: {
-  questionData: QuestionData;
-  className?: string;
-  isAnimating?: boolean;
-  isEntering?: boolean;
-  hasAnswered?: boolean;
-  onExplain?: () => void;
-  selectedAnswers: { [key: string]: string };
-  onOptionClick: (questionText: string, selectedOption: string) => void;
+  questionData: QuestionData
+  className?: string
+  isAnimating?: boolean
+  isEntering?: boolean
+  hasAnswered?: boolean
+  onExplain?: () => void
+  selectedAnswers: { [key: string]: string }
+  onOptionClick: (questionText: string, selectedOption: string) => void
 }) {
-  const { question, options, answer } = questionData;
-
-  // shuffle options when question changes
-  const shuffledOptions = useMemo(() => {
-    const arr = [...options];
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }, [question]);
+  const { question, options, answer } = questionData
 
   // animation classes
   const animationClasses = isAnimating
     ? "motion-safe:motion-blur-out-sm motion-safe:motion-opacity-out-0 motion-safe:motion-duration-100"
     : isEntering
     ? "motion-safe:motion-preset-focus"
-    : "";
+    : ""
 
-  const userSelectedOption = selectedAnswers[question];
+  const userSelectedOption = selectedAnswers[question]
 
   return (
     <div
@@ -56,13 +45,13 @@ export default function Question({
         {question}
       </div>
       <div className="flex flex-col gap-2 w-full">
-        {shuffledOptions.map((optionLabel) => {
-          let status: "correct" | "incorrect" | "default" = "default";
+        {options.map((optionLabel) => {
+          let status: "correct" | "incorrect" | "default" = "default"
           if (userSelectedOption) {
             if (optionLabel === userSelectedOption) {
-              status = userSelectedOption === answer ? "correct" : "incorrect";
+              status = userSelectedOption === answer ? "correct" : "incorrect"
             } else if (optionLabel === answer) {
-              status = "correct";
+              status = "correct"
             }
           }
 
@@ -75,7 +64,7 @@ export default function Question({
               onClick={() => onOptionClick(question, optionLabel)}
               disabled={!!userSelectedOption}
             />
-          );
+          )
         })}
       </div>
       <div className="flex items-center gap-6">
@@ -92,5 +81,5 @@ export default function Question({
         )}
       </div>
     </div>
-  );
+  )
 }

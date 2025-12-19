@@ -1,6 +1,6 @@
-import { Settings, MailQuestion } from "lucide-react";
-import { useEffect, useState } from "react";
-import { animate, stagger } from "motion";
+import { Settings, MailQuestion } from "lucide-react"
+import { useEffect, useState } from "react"
+import { animate, stagger } from "motion"
 
 export default function Sets({
   sets,
@@ -10,33 +10,33 @@ export default function Sets({
   onSettingsClick,
   openFeedbackModal,
 }: {
-  sets: { name: string }[];
-  className?: string;
-  selectedSet?: number;
-  setSelectedSet?: (set: number) => void;
-  onSettingsClick?: () => void;
-  openFeedbackModal?: () => void;
+  sets: { name: string }[]
+  className?: string
+  selectedSet?: number
+  setSelectedSet?: (set: number) => void
+  onSettingsClick?: () => void
+  openFeedbackModal?: () => void
 }) {
-  const selectedIndex = selectedSet ?? 0;
-  const currentName = sets[selectedIndex]?.name || `Set ${selectedIndex + 1}`;
-  const [showingSettingsIcon, setShowingSettingsIcon] = useState(false);
-  const [showingFeedbackIcon, setShowingFeedbackIcon] = useState(false);
+  const selectedIndex = selectedSet ?? 0
+  const currentName = sets[selectedIndex]?.name || `Set ${selectedIndex + 1}`
+  const [showingSettingsIcon, setShowingSettingsIcon] = useState(false)
+  const [showingFeedbackIcon, setShowingFeedbackIcon] = useState(false)
 
   useEffect(() => {
-    const buttons = document.querySelectorAll(".set-button-desktop");
+    const buttons = document.querySelectorAll(".set-button-desktop")
     if (buttons.length > 0) {
       animate(
         buttons,
         { opacity: [0, 1] },
         { delay: stagger(0.05), duration: 0.3, easing: "ease-out" }
       ).finished.then(() => {
-        setShowingSettingsIcon(true);
+        setShowingSettingsIcon(true)
         setTimeout(() => {
-          setShowingFeedbackIcon(true);
-        }, 50);
-      });
+          setShowingFeedbackIcon(true)
+        }, 50)
+      })
     }
-  }, [sets]);
+  }, [sets])
 
   return (
     <div
@@ -51,8 +51,8 @@ export default function Sets({
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer rounded-lg"
           value={selectedIndex}
           onChange={(e) => {
-            const idx = parseInt(e.target.value, 10);
-            setSelectedSet?.(idx);
+            const idx = parseInt(e.target.value, 10)
+            setSelectedSet?.(idx)
           }}
         >
           {sets.map((set, index) => (
@@ -72,7 +72,7 @@ export default function Sets({
               selectedSet === index ? "border-gray-400" : "border-gray-200"
             } hover:bg-gray-50 hover:border-gray-400`}
             onClick={() => {
-              setSelectedSet?.(index);
+              setSelectedSet?.(index)
             }}
             style={{ opacity: 0 }}
           >
@@ -115,5 +115,5 @@ export default function Sets({
         </div>
       )}
     </div>
-  );
+  )
 }
