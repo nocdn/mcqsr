@@ -5,7 +5,6 @@ import ExplainModal from "./ExplainModal"
 import SettingsModal from "./SettingsModal"
 import { useEffect, useState } from "react"
 import FeedbackModal from "./FeedbackModal"
-import Summary from "./Summary"
 
 interface Question {
   question: string

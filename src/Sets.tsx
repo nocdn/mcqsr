@@ -1,6 +1,4 @@
 import { Settings, MailQuestion } from "lucide-react"
-import { useEffect, useState } from "react"
-import { animate, stagger } from "motion"
 
 export default function Sets({
   sets,
@@ -19,24 +17,6 @@ export default function Sets({
 }) {
   const selectedIndex = selectedSet ?? 0
   const currentName = sets[selectedIndex]?.name || `Set ${selectedIndex + 1}`
-  const [showingSettingsIcon, setShowingSettingsIcon] = useState(false)
-  const [showingFeedbackIcon, setShowingFeedbackIcon] = useState(false)
-
-  useEffect(() => {
-    const buttons = document.querySelectorAll(".set-button-desktop")
-    if (buttons.length > 0) {
-      animate(
-        buttons,
-        { opacity: [0, 1] },
-        { delay: stagger(0.05), duration: 0.3, easing: "ease-out" }
-      ).finished.then(() => {
-        setShowingSettingsIcon(true)
-        setTimeout(() => {
-          setShowingFeedbackIcon(true)
-        }, 50)
-      })
-    }
-  }, [sets])
 
   return (
     <div
@@ -82,38 +62,33 @@ export default function Sets({
       </div>
 
       {/* settings icon */}
-      {showingSettingsIcon && (
-        <div
-          className="hidden sm:inline-flex relative items-center ml-2 sm:ml-4 group"
-          title="Settings"
-        >
-          <Settings
-            size={20}
-            className="cursor-pointer motion-preset-focus opacity-20 hover:opacity-100 transition-opacity duration-200"
-            onClick={onSettingsClick}
-          />
-          <div className="absolute bottom-9 left-1/2 transform -translate-x-1/2 w-fit h-fit px-2 py-1 text-xs bg-white border border-gray-200 shadow-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-plex-mono">
-            Settings
-          </div>
+      <div
+        className="hidden sm:inline-flex relative items-center ml-2 sm:ml-4 group"
+        title="Settings"
+      >
+        <Settings
+          size={20}
+          className="cursor-pointer motion-preset-focus opacity-20 hover:opacity-100 transition-opacity duration-200"
+          onClick={onSettingsClick}
+        />
+        <div className="absolute bottom-9 left-1/2 transform -translate-x-1/2 w-fit h-fit px-2 py-1 text-xs bg-white border border-gray-200 shadow-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-plex-mono">
+          Settings
         </div>
-      )}
-
+      </div>
       {/* feedback icon */}
-      {showingFeedbackIcon && (
-        <div
-          className="hidden sm:inline-flex relative items-center ml-2 sm:ml-4 group"
-          title="Feedback"
-        >
-          <MailQuestion
-            size={20}
-            className="cursor-pointer motion-preset-focus opacity-20 hover:opacity-100 transition-opacity duration-200"
-            onClick={() => openFeedbackModal?.()}
-          />
-          <div className="absolute bottom-9 left-1/2 transform -translate-x-1/2 w-fit h-fit px-2 py-1 text-xs bg-white border border-gray-200 shadow-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-plex-mono">
-            Feedback
-          </div>
+      <div
+        className="hidden sm:inline-flex relative items-center ml-2 sm:ml-4 group"
+        title="Feedback"
+      >
+        <MailQuestion
+          size={20}
+          className="cursor-pointer motion-preset-focus opacity-20 hover:opacity-100 transition-opacity duration-200"
+          onClick={() => openFeedbackModal?.()}
+        />
+        <div className="absolute bottom-9 left-1/2 transform -translate-x-1/2 w-fit h-fit px-2 py-1 text-xs bg-white border border-gray-200 shadow-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 font-plex-mono">
+          Feedback
         </div>
-      )}
+      </div>
     </div>
   )
 }
